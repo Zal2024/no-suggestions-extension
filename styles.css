@@ -1,0 +1,265 @@
+/* ==========================================================================
+   No Suggestions & No Infinite Scroll - Content Stylesheet (Always-On)
+   Covers: YouTube (Home, Player, Sidebar, Shorts), Instagram, X, and Reddit
+   ========================================================================== */
+
+/* ==========================================================================
+   1. YOUTUBE (youtube.com)
+   ========================================================================== */
+
+/* --- 1A. YouTube Homepage Feed --- */
+ytd-browse[page-subtype="home"] ytd-two-column-browse-results-renderer,
+ytd-browse[page-subtype="home"] ytd-rich-grid-renderer,
+ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
+ytd-browse[page-subtype="home"] #header,
+ytd-browse[page-subtype="home"] #alerts,
+ytm-browse [tab-identifier="FEwhat_to_watch"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+ytd-browse[page-subtype="home"]::after {
+  content: "Homepage video suggestions are disabled.";
+  display: block;
+  margin: 120px auto 0;
+  text-align: center;
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--yt-spec-text-secondary, #888888);
+  letter-spacing: 0.2px;
+  user-select: none;
+}
+
+/* --- 1B. Inside Video Player Suggestions & Autoplay --- */
+.html5-endscreen,
+.ytp-endscreen-content,
+.ytp-endscreen-previous,
+.ytp-endscreen-next,
+.ytp-videowall-still,
+.ytp-modern-endscreen-content,
+.ytp-fullscreen-grid,
+.ytp-fullscreen-grid-stills-container,
+.ytp-ce-element,
+.ytp-ce-video,
+.ytp-ce-playlist,
+.ytp-ce-channel,
+.ytp-ce-website,
+.ytp-ce-covering-overlay,
+.ytp-ce-expanding-image,
+.ytp-ce-shadow,
+.ytp-pause-overlay,
+.ytp-pause-overlay-container,
+.ytp-scroll-min,
+.ytp-suggestion-set,
+.ytp-cards-teaser,
+.ytp-cards-button,
+.ytp-cards-button-icon,
+.ytp-drawer,
+.ytp-autonav-endscreen,
+.ytp-autonav-endscreen-countdown-overlay,
+.ytp-autonav-endscreen-upnext-container,
+.ytp-suggested-action,
+.ytp-autonav-toggle-button-container,
+.ytp-button[data-tooltip-target-id="ytp-autonav-toggle-button"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* --- 1C. Watch Page Sidebar / Related Videos --- */
+#related,
+ytd-watch-next-secondary-results-renderer,
+ytd-item-section-renderer[section-identifier="related-items"],
+ytm-item-section-renderer[section-identifier="related-items"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* --- 1D. YouTube Shorts Entry Points & Shelves (Everywhere) --- */
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer[is-shorts],
+ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+ytd-guide-entry-renderer:has(a[title="Shorts"]),
+ytd-guide-entry-renderer a[title="Shorts"],
+yt-tab-shape[tab-title="Shorts"],
+ytm-pivot-bar-item-renderer:has(.pivot-shorts),
+ytm-reel-shelf-renderer,
+grid-shelf-view-model:has(ytm-shorts-lockup-view-model),
+ytd-search ytd-shelf-renderer:has(ytd-reel-item-renderer) {
+  display: none !important;
+}
+
+/* --- 1E. YouTube Shorts Direct URL (/shorts/VIDEO_ID):
+       Allow the 1st Short video (id="0") to load and play, but block infinite
+       scrolling and hide all subsequent Shorts & up/down navigation buttons! --- */
+ytd-shorts,
+ytd-shorts #shorts-container,
+ytd-shorts #shorts-inner-container {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
+
+ytd-shorts #navigation-button-down,
+ytd-shorts #navigation-button-up,
+ytd-shorts .navigation-button,
+ytd-shorts .navigation-container,
+ytd-shorts .reel-video-in-sequence-new:not([id="0"]),
+ytd-shorts .reel-video-in-sequence:not([id="0"]),
+ytd-shorts ytd-reel-video-renderer ~ ytd-reel-video-renderer {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+
+/* ==========================================================================
+   2. INSTAGRAM (instagram.com)
+   Allows Friends' Stories tray & DMs/Search, removes Post Feed, Reels & Explore.
+   IMPORTANT: Uses offscreen transform + 10000vh height instead of display:none
+   on feed items/sentinels so IntersectionObserver never enters the viewport
+   and never triggers endless background post fetching!
+   ========================================================================== */
+
+/* Hide Reels and Explore entry links in Instagram navigation */
+html[data-anti-scroll-site="instagram"] a[href="/explore/"],
+html[data-anti-scroll-site="instagram"] a[href="/reels/"],
+html[data-anti-scroll-site="instagram"] a[href^="/reels/"],
+html[data-anti-scroll-site="instagram"] a[href*="/explore/people"] {
+  display: none !important;
+}
+
+/* Push Instagram Home feed articles and loading sentinels 10,000vh below the
+   viewport instead of collapsing them to height:0, so IntersectionObserver
+   never fires and Instagram stops requesting posts after initial load. */
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] main article,
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] main [data-pagelet*="FeedUnit"],
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] main [role="progressbar"],
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] main [data-visualcompletion="loading-state"],
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] main svg[aria-label="Loading..."],
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] [data-anti-scroll-ig-feed="true"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10000vh) !important;
+  min-height: 10000vh !important;
+}
+
+/* Hide "Suggested for you" right-sidebar block on Instagram Home */
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] [data-anti-scroll-ig-suggested="true"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] body,
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="home"] {
+  overflow: hidden !important;
+  max-height: 100vh !important;
+}
+
+/* Block Instagram Reels & Explore pages if visited directly */
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="reels"] main > *,
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="explore"] main > * {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10000vh) !important;
+}
+
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="reels"] body,
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="reels"],
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="explore"] body,
+html[data-anti-scroll-site="instagram"][data-anti-scroll-page="explore"] {
+  overflow: hidden !important;
+  max-height: 100vh !important;
+}
+
+
+/* ==========================================================================
+   3. X / TWITTER (x.com, twitter.com)
+   Allows DMs, Notifications, Search, Direct Posts; blocks Home & Explore feeds
+   ========================================================================== */
+
+/* Hide Right Sidebar Trends / "What's happening" / "Who to follow" everywhere on X */
+html[data-anti-scroll-site="x"] [data-testid="sidebarColumn"] [aria-label="Timeline: Trending now"],
+html[data-anti-scroll-site="x"] [data-testid="sidebarColumn"] [aria-label="Who to follow"],
+html[data-anti-scroll-site="x"] [data-testid="sidebarColumn"] [data-testid="trend"],
+html[data-anti-scroll-site="x"] a[href="/explore"] {
+  display: none !important;
+}
+
+/* Push Home Timeline ("For you" / "Following") offscreen on X Home so it never paginates */
+html[data-anti-scroll-site="x"][data-anti-scroll-page="home"] [data-testid="primaryColumn"] section[role="region"],
+html[data-anti-scroll-site="x"][data-anti-scroll-page="home"] [aria-label="Timeline: Your Home Timeline"],
+html[data-anti-scroll-site="x"][data-anti-scroll-page="home"] [data-testid="ScrollSnap-SwipeableList"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10000vh) !important;
+  min-height: 10000vh !important;
+}
+
+html[data-anti-scroll-site="x"][data-anti-scroll-page="home"] body,
+html[data-anti-scroll-site="x"][data-anti-scroll-page="home"] {
+  overflow: hidden !important;
+  max-height: 100vh !important;
+}
+
+/* Hide Explore Timeline feed on X while keeping the Search bar */
+html[data-anti-scroll-site="x"][data-anti-scroll-page="explore"] [data-testid="primaryColumn"] section[role="region"],
+html[data-anti-scroll-site="x"][data-anti-scroll-page="explore"] [aria-label="Timeline: Explore"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10000vh) !important;
+  min-height: 10000vh !important;
+}
+
+
+/* ==========================================================================
+   4. REDDIT (reddit.com)
+   Allows Search & reading specific comment threads (/comments/);
+   blocks Home/Popular/Subreddit feeds and infinite "Read more" recommendations
+   ========================================================================== */
+
+/* Push infinite post feeds offscreen on Reddit Home, Popular, All, and Subreddit pages */
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] shreddit-feed,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] #main-content shreddit-post,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] shreddit-gallery-carousel,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] community-highlight-carousel,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] [data-testid="posts-list"],
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] .ListingLayout-outerContainer .rpBJOHq2PR60pnwJlUyP0,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] #siteTable {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10000vh) !important;
+  min-height: 10000vh !important;
+}
+
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] body,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="feed"] {
+  overflow: hidden !important;
+  max-height: 100vh !important;
+}
+
+/* On a specific Reddit post (/comments/...), hide infinite "More posts you may like" below comments */
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="post"] shreddit-feed,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="post"] [bundlename="read_more_posts"],
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="post"] pdp-right-rail,
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="post"] #right-sidebar-container [aria-label="Related Posts"],
+html[data-anti-scroll-site="reddit"][data-anti-scroll-page="post"] faceplate-batch[src*="more-posts"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10000vh) !important;
+}

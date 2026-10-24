@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "No Suggestions & No Infinite Scroll",
+  "version": "2.0.0",
+  "description": "Permanently disables YouTube suggestions & Shorts scrolling, and blocks infinite-scrolling feeds on Instagram, X (Twitter), and Reddit while keeping minimal utility.",
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtube-nocookie.com/*",
+    "*://*.instagram.com/*",
+    "*://*.x.com/*",
+    "*://*.twitter.com/*",
+    "*://*.reddit.com/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtube-nocookie.com/*",
+        "*://*.instagram.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*",
+        "*://*.reddit.com/*"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
